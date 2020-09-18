@@ -56,6 +56,14 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
+	/**
+	 * 调用 Bean Factory 的后置处理器
+	 * 1.判断当前 beanFactory是否时BeanDefinitionRegistry的实例
+	 * 	是：
+	 *
+	 * @param beanFactory
+	 * @param beanFactoryPostProcessors
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
