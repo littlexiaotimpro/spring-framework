@@ -58,8 +58,6 @@ final class PostProcessorRegistrationDelegate {
 
 	/**
 	 * 调用 Bean Factory 的后置处理器
-	 * 1.判断当前 beanFactory是否时BeanDefinitionRegistry的实例
-	 * 	是：
 	 *
 	 * @param beanFactory
 	 * @param beanFactoryPostProcessors
@@ -70,12 +68,22 @@ final class PostProcessorRegistrationDelegate {
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
 		Set<String> processedBeans = new HashSet<>();
 
+		/*
+		 * 判断当前工厂实例是否是BeanDefinitionRegistry的类实例
+		 * beanFactory 是 DefaultListableBeanFactory 的类实例
+		 * 而这个类正好实现了定义注册器接口，满足判断条件
+		 */
 		if (beanFactory instanceof BeanDefinitionRegistry) {
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+			// 常规的实体Bean后置处理器
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
+			// 实体Bean定义注册的后置处理器
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
 
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
+				/*
+				 * 遍历所有的后置处理器，判断当期对象是BeanDefinitionRegistryPostProcessor的实例
+				 */
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
 							(BeanDefinitionRegistryPostProcessor) postProcessor;
