@@ -7,7 +7,7 @@ import com.spring.start.test.entity.DemoBeanE;
 import org.springframework.context.annotation.*;
 
 @Configuration
-@ComponentScan(basePackages = {"com.practice"})
+@ComponentScan(basePackages = {"com.spring"})
 @Import({ImportDemoSelector.class,ImportDemoBeanDefinitionRegistrar.class})
 public class ComponentScanConfig {
 
