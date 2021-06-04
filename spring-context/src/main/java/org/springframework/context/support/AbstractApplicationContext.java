@@ -576,6 +576,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				// 在对象创建之前注册一些后置处理器
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
@@ -933,7 +934,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Allow for caching all bean definition metadata, not expecting further changes.
 		beanFactory.freezeConfiguration();
 
-		// Instantiate all remaining (non-lazy-init) singletons.
+		/*
+		 * Instantiate all remaining (non-lazy-init) singletons.
+		 * 实例化所有非懒加载的单实例 bean
+		 */
 		beanFactory.preInstantiateSingletons();
 	}
 

@@ -590,8 +590,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 		}
 
-		// Eagerly cache singletons to be able to resolve circular references
-		// even when triggered by lifecycle interfaces like BeanFactoryAware.
+		/*
+		 * Eagerly cache singletons to be able to resolve circular references
+		 * even when triggered by lifecycle interfaces like BeanFactoryAware.
+		 *
+		 * 到这一步为止，仅仅完成了对象实例的创建，还未进行对象属性的注入及初始化
+		 * 判断当前单实例对象是否需要提前暴露：是否单实例 bean && 是否允许循环引用 && 是否是正在创建的单实例 bean
+		 * 若需要则创建当前对象实例的工厂对象，并修改缓存数据
+		 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -971,6 +977,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		Object exposedObject = bean;
 		if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
 			for (SmartInstantiationAwareBeanPostProcessor bp : getBeanPostProcessorCache().smartInstantiationAware) {
+				/*
+				 * 获取早期的对象，用于处理循环引用
+				 * 若需要的对象是一个代理对象，此处获取对象的时候会包装一个代理对象并返回
+				 */
 				exposedObject = bp.getEarlyBeanReference(exposedObject, beanName);
 			}
 		}
