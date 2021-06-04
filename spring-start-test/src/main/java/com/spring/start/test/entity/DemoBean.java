@@ -1,12 +1,23 @@
 package com.spring.start.test.entity;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+import javax.inject.Inject;
 
+/**
+ * 测试不同注解的注入方式
+ */
 public class DemoBean {
 
-    @Autowired
+	/**
+	 * JSR-250
+	 */
+    @Resource
     private DemoBeanC demoBeanC;
-    @Autowired
+
+	/**
+	 * JSR-330
+	 */
+	@Inject
     private DemoBeanD demoBeanD;
 
     /**

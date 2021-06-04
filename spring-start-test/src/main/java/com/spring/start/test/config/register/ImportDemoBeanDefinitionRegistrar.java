@@ -1,6 +1,8 @@
 package com.spring.start.test.config.register;
 
 import com.spring.start.test.entity.DemoBeanC;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -15,20 +17,23 @@ import java.util.Set;
  */
 public class ImportDemoBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
-    /**
-     * 自定义注册Bean
-     * @param importingClassMetadata 导入的类的注解信息
-     * @param registry Bean定义的注册类
-     */
-    @Override
-    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        Set<String> annotationTypes = importingClassMetadata.getAnnotationTypes();
-        System.out.println(annotationTypes);
-        // 定义注入的实例的Bean定义
-        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(DemoBeanC.class);
-        // 设置其作用域：单例
-        rootBeanDefinition.setScope("singleton");
-        // @Import 注入的实例默认是类的全限定类名，自定义注入的可以指定注入的实例名
-        registry.registerBeanDefinition("demoBeanC",rootBeanDefinition);
-    }
+	private static final Log logger = LogFactory.getLog(ImportDemoBeanDefinitionRegistrar.class);
+
+	/**
+	 * 自定义注册Bean
+	 *
+	 * @param importingClassMetadata 导入的类的注解信息
+	 * @param registry               Bean定义的注册类
+	 */
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+		Set<String> annotationTypes = importingClassMetadata.getAnnotationTypes();
+		logger.debug(annotationTypes);
+		// 定义注入的实例的Bean定义
+		RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(DemoBeanC.class);
+		// 设置其作用域：单例
+		rootBeanDefinition.setScope("singleton");
+		// @Import 注入的实例默认是类的全限定类名，自定义注入的可以指定注入的实例名
+		registry.registerBeanDefinition("demoBeanC", rootBeanDefinition);
+	}
 }

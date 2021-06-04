@@ -9,6 +9,8 @@ repositories {
 
 dependencies {
     compile(project(":spring-context"))
+    optional("javax.annotation:javax.annotation-api")
+    optional("javax.inject:javax.inject")
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
