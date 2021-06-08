@@ -517,6 +517,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
+			// 给后置处理器一个返回代理对象的机会，用于替换目标对象实例（AOP）
 			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);
 			if (bean != null) {
 				return bean;
@@ -528,6 +529,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		try {
+			// 实际创建对象的步骤
 			Object beanInstance = doCreateBean(beanName, mbdToUse, args);
 			if (logger.isTraceEnabled()) {
 				logger.trace("Finished creating instance of bean '" + beanName + "'");
@@ -568,6 +570,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
 		}
 		if (instanceWrapper == null) {
+			// 创建对象实例，通过构造器的方式注入属性
 			instanceWrapper = createBeanInstance(beanName, mbd, args);
 		}
 		Object bean = instanceWrapper.getWrappedInstance();
@@ -577,9 +580,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Allow post-processors to modify the merged bean definition.
+		// 允许后处理器修改合并的bean定义。
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
+					// 应用合并的 Bean 定义后处理器
 					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
 				}
 				catch (Throwable ex) {
@@ -611,6 +616,21 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Initialize the bean instance.
 		Object exposedObject = bean;
 		try {
+			/*
+			 * 初始化实例：
+			 * 1.填充对象属性，即完成属性初始化和注入（ByName or ByType）
+			 *	-> byType
+			 *  -> byName
+			 *  -> AutowiredAnnotationBeanPostProcessor
+			 * 2.调用对象的初始化方法（若存在），在初始化方法调用之前需要执行相关方法
+			 *  -> invokeAwareMethods（若当前对象实现了Aware接口，则调用相关实现）
+			 *  -> applyBeanPostProcessorsBeforeInitialization（执行后置处理器的初始化前置方法）
+			 * 	-> invokeInitMethods（执行初始化方法）
+			 *    -> 自定义初始化方法
+			 * 	  -> 实现 InitializingBean::afterPropertiesSet
+			 * 	  -> InitDestroyAnnotationBeanPostProcessor（JSR-250 @PostConstruct）
+			 * 	-> applyBeanPostProcessorsAfterInitialization（执行后置处理器的初始化后置方法）
+			 */
 			populateBean(beanName, mbd, instanceWrapper);
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
@@ -1121,6 +1141,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	@Nullable
 	protected Object resolveBeforeInstantiation(String beanName, RootBeanDefinition mbd) {
 		Object bean = null;
+		// 对象实例化之前执行此逻辑
 		if (!Boolean.FALSE.equals(mbd.beforeInstantiationResolved)) {
 			// Make sure bean class is actually resolved at this point.
 			if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {

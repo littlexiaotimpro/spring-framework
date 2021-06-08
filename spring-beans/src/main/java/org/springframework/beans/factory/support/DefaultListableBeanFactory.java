@@ -935,12 +935,14 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 							isEagerInit = (factory instanceof SmartFactoryBean &&
 									((SmartFactoryBean<?>) factory).isEagerInit());
 						}
+						// 工厂 Bean 对象是否急于初始化的实例对象
 						if (isEagerInit) {
 							getBean(beanName);
 						}
 					}
 				}
 				else {
+					// 通过名称获取实例对象，若容器中不存在对象，则会自动创建对象并加入容器
 					getBean(beanName);
 				}
 			}

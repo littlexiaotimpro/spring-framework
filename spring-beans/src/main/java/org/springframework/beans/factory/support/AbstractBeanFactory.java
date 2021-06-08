@@ -253,9 +253,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		// 急切地检查单例缓存是否有手动注册的单例（验证缓存中是否已经存在对象）
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
+				// 单实例对象处在创建的过程中（已经创建实例，但还未进行属性的初始化及注入操作）
 				if (isSingletonCurrentlyInCreation(beanName)) {
 					logger.trace("Returning eagerly cached instance of singleton bean '" + beanName +
 							"' that is not fully initialized yet - a consequence of a circular reference");
@@ -309,7 +311,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				checkMergedBeanDefinition(mbd, beanName, args);
 
-				// Guarantee initialization of beans that the current bean depends on.
+				/*
+				 * Guarantee initialization of beans that the current bean depends on.
+				 * @DependsOn
+				 * 保证当前 bean 所依赖的 bean 的初始化
+				 */
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {

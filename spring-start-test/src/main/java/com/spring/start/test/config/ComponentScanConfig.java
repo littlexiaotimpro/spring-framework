@@ -31,11 +31,11 @@ public class ComponentScanConfig {
      * 不符合条件的组件不会进行注入
      * PS:若注解修饰整个配置类，即使内部存在符合条件的组件，但整个配置类不符合条件依旧不会注入
      */
-    @Profile("test")
+    /*@Profile("test")
     @Bean
     public DemoBeanE demoBeanE(DemoBean demoBean1){
         DemoBeanE demoBeanE = new DemoBeanE();
         demoBeanE.setDemoBean(demoBean1);
         return demoBeanE;
-    }
+    }*/
 }
