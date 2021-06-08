@@ -9,6 +9,7 @@ import org.springframework.context.annotation.*;
 @Configuration
 @ComponentScan(basePackages = {"com.spring"})
 @Import({ImportDemoSelector.class,ImportDemoBeanDefinitionRegistrar.class})
+@EnableAspectJAutoProxy
 public class ComponentScanConfig {
 
     @Bean(name="demoBean",initMethod = "init",destroyMethod = "destroy")

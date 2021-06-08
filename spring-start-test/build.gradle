@@ -9,6 +9,7 @@ repositories {
 
 dependencies {
     compile(project(":spring-context"))
+    optional("org.aspectj:aspectjweaver")
     optional("javax.annotation:javax.annotation-api")
     optional("javax.inject:javax.inject")
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
