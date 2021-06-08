@@ -571,12 +571,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
-				// Invoke factory processors registered as beans in the context.
-				// 调用在上下文中注册为bean的工厂处理器
+				/*
+				 * Invoke factory processors registered as beans in the context.
+				 * 调用在上下文中注册为bean的工厂处理器
+				 * 1.首先判断 beanFactory 是 BeanDefinitionRegistry 的实例
+				 * 	如果是则先进行 BeanDefinitionRegistryPostProcessor 的后置处理操作
+				 *  然后进行 BeanFactoryPostProcessor 的后置处理操作
+				 * 2.进行 BeanFactoryPostProcessor 的后置处理操作
+				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.
-				// 在对象创建之前注册一些后置处理器
+				/*
+				 * Register bean processors that intercept bean creation.
+				 * 在对象创建之前按优先级（排序）注册一些后置处理器
+				 * 注册各优先级后置处理器，需要将 MergedBeanDefinitionPostProcessor 收集，最后进行排序并注册
+				 *
+				 * 注意，为了避免重复注册，会先删除然后执行注册操作
+				 *
+				 */
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
@@ -593,6 +605,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				// 实例化所有非懒加载的单实例 Bean
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -911,6 +924,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Initialize conversion service for this context.
 		if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME) &&
 				beanFactory.isTypeMatch(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class)) {
+			// 初始化服务转换对象
 			beanFactory.setConversionService(
 					beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME, ConversionService.class));
 		}
@@ -919,6 +933,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// (such as a PropertyPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
 		if (!beanFactory.hasEmbeddedValueResolver()) {
+			// 添加嵌入值解析器（表达式解析器）
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 

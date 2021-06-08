@@ -19,7 +19,7 @@ public class DemoBeanPostProcessor implements BeanPostProcessor {
      */
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("后置处理器的初始化前置方法========>" + beanName);
+        System.out.println("DemoBeanPostProcessor ==> init.before ========>" + beanName);
         return bean;
     }
 
@@ -30,7 +30,7 @@ public class DemoBeanPostProcessor implements BeanPostProcessor {
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        System.out.println("后置处理器的初始化后置方法========>" + beanName);
+        System.out.println("DemoBeanPostProcessor ==> init.after ========>" + beanName);
         return bean;
     }
 }
