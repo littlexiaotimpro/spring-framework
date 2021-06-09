@@ -3,6 +3,7 @@ package com.spring.start.test;
 import com.spring.start.test.config.ComponentScanConfig;
 import com.spring.start.test.entity.DemoBeanD;
 import com.spring.start.test.entity.DemoBeanF;
+import com.spring.start.test.service.DemoBeanService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -26,8 +27,8 @@ public class Application {
 	public static void main(String[] args) {
 		LOGGER.debug("Application Starting...");
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ComponentScanConfig.class);
-		DemoBeanF bean = applicationContext.getBean(DemoBeanF.class);
-		System.out.println(bean.getDemoBeanD());
+		DemoBeanService bean = applicationContext.getBean(DemoBeanService.class);
+		bean.getMethod();
 		applicationContext.close();
 		LOGGER.debug("Application Stopped!");
 	}

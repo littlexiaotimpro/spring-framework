@@ -1,5 +1,6 @@
 package com.spring.start.test.entity;
 
+import com.spring.start.test.service.DemoBeanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 默认 required = true，当注入属性查找不到对应实例 bean，会抛异常
  */
 @Component
-public class DemoBeanF {
+public class DemoBeanF implements DemoBeanService {
 
     private final DemoBeanC demoBeanC;
     private final DemoBeanD demoBeanD;
@@ -31,4 +32,9 @@ public class DemoBeanF {
     public DemoBeanD getDemoBeanD() {
         return demoBeanD;
     }
+
+	@Override
+	public void getMethod() {
+		System.out.println("实现的接口方法！");
+	}
 }
