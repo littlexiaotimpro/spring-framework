@@ -187,14 +187,24 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		// 判断一级缓存中是否存在可用的单实例，存在则直接返回
 		Object singletonObject = this.singletonObjects.get(beanName);
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
 			synchronized (this.singletonObjects) {
+				// 一级缓存不存在实例，判断二级缓存中是否存在早期的单例对象
 				singletonObject = this.earlySingletonObjects.get(beanName);
 				if (singletonObject == null && allowEarlyReference) {
+					// 二级缓存不存在，但允许早期引用当前创建的单例，查看三级缓存是否存在当前实例的工厂Bean
 					ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 					if (singletonFactory != null) {
 						singletonObject = singletonFactory.getObject();
+						/*
+						 * 将工厂Bean返回的对象放入二级缓存，并从三级缓存中移除此实例的工厂Bean
+						 * 若循环引用注入的是一个代理对象，在工厂获取对象的过程中
+						 * 		调用 AbstractAutowireCapableBeanFactory.getEarlyBeanReference
+						 * 依据AOP 的 AbstractAutoProxyCreator（实现了 SmartInstantiationAwareBeanPostProcessor）
+						 * 实现对象的自动包装
+						 */
 						this.earlySingletonObjects.put(beanName, singletonObject);
 						this.singletonFactories.remove(beanName);
 					}
