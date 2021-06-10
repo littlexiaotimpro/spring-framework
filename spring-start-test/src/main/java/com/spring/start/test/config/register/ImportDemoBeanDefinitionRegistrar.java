@@ -3,6 +3,7 @@ package com.spring.start.test.config.register;
 import com.spring.start.test.entity.DemoBeanC;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -32,7 +33,7 @@ public class ImportDemoBeanDefinitionRegistrar implements ImportBeanDefinitionRe
 		// 定义注入的实例的Bean定义
 		RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(DemoBeanC.class);
 		// 设置其作用域：单例
-		rootBeanDefinition.setScope("singleton");
+		rootBeanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
 		// @Import 注入的实例默认是类的全限定类名，自定义注入的可以指定注入的实例名
 		registry.registerBeanDefinition("demoBeanC", rootBeanDefinition);
 	}

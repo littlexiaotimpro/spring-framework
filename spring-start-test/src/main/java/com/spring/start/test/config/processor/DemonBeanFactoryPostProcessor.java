@@ -30,6 +30,6 @@ public class DemonBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 		// 1.获取bean定义并重新设置其中的相关属性，如作用域，懒加载等
 		BeanDefinition beanDefinition = beanFactory.getBeanDefinition("demoBeanB");
 		logger.debug(Arrays.toString(beanDefinition.attributeNames()));
-		beanDefinition.setScope("prototype");
+		beanDefinition.setScope(BeanDefinition.SCOPE_PROTOTYPE);
 	}
 }

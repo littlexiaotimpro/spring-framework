@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
 /**
+ * 在配置类中通过{@link org.springframework.context.annotation.Import} 注入
+ * ImportDemoSelector implements ImportSelector
+ * 返回需要导入的类的全限定类名数组，不能返回null
  * 通过 PropertySource 加载配置文件
  */
 @PropertySource(value = {"classpath:/props.properties"})
